@@ -44,7 +44,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(fraxId),
 			ethers.BigNumber.from("1000000")
 		);
-
+		// console.log(temp);
 		console.log("1 USDC equals " + (temp[0] / 1e18).toString() + " FRAX");
 
 		temp = await oracle.callStatic.get(
@@ -52,6 +52,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(usdcId),
 			ethers.BigNumber.from("1000000000000000000")
 		);
+		// console.log(temp);
 
 		console.log("1 FRAX equals " + (temp[0] / 1e6).toString() + " USDC");
 	});
@@ -62,7 +63,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(wethId),
 			ethers.BigNumber.from("1000000")
 		);
-
+		// console.log(temp);
 		console.log("1 USDC equals " + (temp[0] / 1e18).toString() + " WETH");
 
 		temp = await oracle.callStatic.get(
@@ -70,7 +71,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(usdcId),
 			ethers.BigNumber.from("1000000000000000000")
 		);
-
+		// console.log(temp);
 		console.log("1 WETH equals " + (temp[0] / 1e6).toString() + " USDC");
 	});
 
@@ -80,7 +81,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(wethId),
 			ethers.BigNumber.from("1000000000000000000")
 		);
-
+		// console.log(temp);
 		console.log("1 UNI equals " + (temp[0] / 1e18).toString() + " WETH");
 
 		temp = await oracle.callStatic.get(
@@ -88,7 +89,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(uniId),
 			ethers.BigNumber.from("1000000000000000000")
 		);
-
+		// console.log(temp);
 		console.log("1 WETH equals " + (temp[0] / 1e18).toString() + " UNI");
 	});
 
@@ -98,7 +99,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(usdcId),
 			ethers.BigNumber.from("100000000")
 		);
-
+		// console.log(temp);
 		console.log("1 WBTC equals " + (temp[0] / 1e6).toString() + " USDC");
 
 		temp = await oracle.callStatic.get(
@@ -106,7 +107,7 @@ describe("Oracle", function () {
 			bytes6ToBytes32(wbtcId),
 			ethers.BigNumber.from("1000000")
 		);
-
+		// console.log(temp);
 		console.log("1 USDC equals " + (temp[0] / 1e8).toString() + " WBTC");
 	});
 });

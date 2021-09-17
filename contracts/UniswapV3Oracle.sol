@@ -124,6 +124,14 @@ contract UniswapV3Oracle is IOracle, AccessControl {
                 sourceData.quoteToken,
                 sourceData.baseToken
             );
+            // value = UniswapV3OracleLibraryMock.consult(
+            //     sourceData.factory,
+            //     sourceData.quoteToken,
+            //     sourceData.baseToken,
+            //     sourceData.fee,
+            //     amount,
+            //     secondsAgo
+            // );
         } else {
             value = OracleLibrary.getQuoteAtTick(
                 twapTick,
@@ -131,6 +139,14 @@ contract UniswapV3Oracle is IOracle, AccessControl {
                 sourceData.baseToken,
                 sourceData.quoteToken
             );
+            // value = UniswapV3OracleLibraryMock.consult(
+            //     sourceData.factory,
+            //     sourceData.baseToken,
+            //     sourceData.quoteToken,
+            //     sourceData.fee,
+            //     amount,
+            //     secondsAgo
+            // );
         }
         updateTime = block.timestamp - secondsAgo;
     }
