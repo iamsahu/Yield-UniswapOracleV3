@@ -26,16 +26,10 @@ describe("Oracle", function () {
 		oracle = await deployContract(ownerAcc, UniswapV3OracleArtifact, []); // Oracle.deploy();
 		// await oracle.deployed();
 
-		await oracle.setSources(
-			[fraxId, usdcId, uniId, wbtcId],
-			[usdcId, wethId, wethId, usdcId],
-			[
-				fraxusdcPoolAddress,
-				usdcEthPoolAddress,
-				uniEthPoolAddress,
-				wbtcUsdcPoolAddress,
-			]
-		);
+		await oracle.setSource(fraxId, usdcId, fraxusdcPoolAddress)
+		await oracle.setSource(usdcId, wethId, usdcEthPoolAddress)
+		await oracle.setSource(uniId, wethId, uniEthPoolAddress)
+		await oracle.setSource(wbtcId, usdcId, wbtcUsdcPoolAddress)
 	});
 
 	it("FRAX/USDC", async function () {
