@@ -4,8 +4,8 @@ pragma solidity >=0.5.0;
 import "@yield-protocol/utils-v2/contracts/access/AccessControl.sol";
 import "@yield-protocol/vault-interfaces/IOracle.sol";
 import "@yield-protocol/utils-v2/contracts/cast/CastBytes32Bytes6.sol";
-import "@uniswap/v3-periphery/contracts/libraries/OracleLibrary.sol";
-import "@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolImmutables.sol";
+import "./uniswapv0.8/OracleLibrary.sol";
+import "./uniswapv0.8/pool/IUniswapV3PoolImmutables.sol";
 
 /**
  * @title UniswapV3Oracle
@@ -44,7 +44,11 @@ contract UniswapV3Oracle is IOracle, AccessControl {
     }
 
     /// @dev Set or reset an oracle source and its inverse
-    function setSource(bytes6 base, bytes6 quote, address source) external auth {
+    function setSource(
+        bytes6 base,
+        bytes6 quote,
+        address source
+    ) external auth {
         sources[base][quote] = Source(source, false);
         sources[quote][base] = Source(source, true);
         sourcesData[source] = SourceData(
@@ -58,26 +62,40 @@ contract UniswapV3Oracle is IOracle, AccessControl {
     }
 
     /// @dev Convert amountBase base into quote at the latest oracle price.
-    function peek(bytes32 base, bytes32 quote, uint256 amountBase)
-        external view virtual override
+    function peek(
+        bytes32 base,
+        bytes32 quote,
+        uint256 amountBase
+    )
+        external
+        view
+        virtual
+        override
         returns (uint256 amountQuote, uint256 updateTime)
     {
         return _peek(base.b6(), quote.b6(), amountBase);
     }
 
     /// @dev Convert amountBase base into quote at the latest oracle price, updating state if necessary. Same as `peek` for this oracle.
-    function get(bytes32 base, bytes32 quote, uint256 amountBase)
-        external virtual override
+    function get(
+        bytes32 base,
+        bytes32 quote,
+        uint256 amountBase
+    )
+        external
+        virtual
+        override
         returns (uint256 amountQuote, uint256 updateTime)
     {
         return _peek(base.b6(), quote.b6(), amountBase);
     }
 
     /// @dev Convert amountBase base into quote at the latest oracle price.
-    function _peek(bytes6 base, bytes6 quote, uint256 amountBase)
-        private view
-        returns (uint256 amountQuote, uint256 updateTime)
-    {
+    function _peek(
+        bytes6 base,
+        bytes6 quote,
+        uint256 amountBase
+    ) private view returns (uint256 amountQuote, uint256 updateTime) {
         Source memory source = sources[base][quote];
         SourceData memory sourceData;
         require(source.source != address(0), "Source not found");

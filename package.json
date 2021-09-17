@@ -18,7 +18,6 @@
     "hardhat": "^2.6.4"
   },
   "dependencies": {
-    "@uniswap/v3-periphery": "^1.1.1",
     "@yield-protocol/utils-v2": "^2.4.2",
     "@yield-protocol/vault-interfaces": "^2.3.0-rc4"
   }

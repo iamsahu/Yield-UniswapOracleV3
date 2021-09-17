@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.5.0;
 
-import '@uniswap/v3-core/contracts/libraries/FullMath.sol';
-import '@uniswap/v3-core/contracts/libraries/TickMath.sol';
-import '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
-import '@uniswap/v3-core/contracts/libraries/LowGasSafeMath.sol';
-import '../libraries/PoolAddress.sol';
+import "./FullMath.sol";
+import "./TickMath.sol";
+import "./IUniswapV3Pool.sol";
+import "./LowGasSafeMath.sol";
+import "./PoolAddress.sol";
 
 /// @title Oracle library
 /// @notice Provides functions to integrate with V3 pool oracle
@@ -14,20 +14,31 @@ library OracleLibrary {
     /// @param pool Address of Uniswap V3 pool that we want to observe
     /// @param period Number of seconds in the past to start calculating time-weighted average
     /// @return timeWeightedAverageTick The time-weighted average tick from (block.timestamp - period) to block.timestamp
-    function consult(address pool, uint32 period) internal view returns (int24 timeWeightedAverageTick) {
-        require(period != 0, 'BP');
+    function consult(address pool, uint32 period)
+        internal
+        view
+        returns (int24 timeWeightedAverageTick)
+    {
+        require(period != 0, "BP");
 
         uint32[] memory secondAgos = new uint32[](2);
         secondAgos[0] = period;
         secondAgos[1] = 0;
 
-        (int56[] memory tickCumulatives, ) = IUniswapV3Pool(pool).observe(secondAgos);
+        (int56[] memory tickCumulatives, ) = IUniswapV3Pool(pool).observe(
+            secondAgos
+        );
         int56 tickCumulativesDelta = tickCumulatives[1] - tickCumulatives[0];
 
-        timeWeightedAverageTick = int24(tickCumulativesDelta / int56(uint56(period)));
+        timeWeightedAverageTick = int24(
+            tickCumulativesDelta / int56(uint56(period))
+        );
 
         // Always round to negative infinity
-        if (tickCumulativesDelta < 0 && (tickCumulativesDelta % int56(uint56(period)) != 0)) timeWeightedAverageTick--;
+        if (
+            tickCumulativesDelta < 0 &&
+            (tickCumulativesDelta % int56(uint56(period)) != 0)
+        ) timeWeightedAverageTick--;
     }
 
     /// @notice Given a tick and a token amount, calculates the amount of token received in exchange
@@ -51,7 +62,11 @@ library OracleLibrary {
                 ? FullMath.mulDiv(ratioX192, baseAmount, 1 << 192)
                 : FullMath.mulDiv(1 << 192, baseAmount, ratioX192);
         } else {
-            uint256 ratioX128 = FullMath.mulDiv(sqrtRatioX96, sqrtRatioX96, 1 << 64);
+            uint256 ratioX128 = FullMath.mulDiv(
+                sqrtRatioX96,
+                sqrtRatioX96,
+                1 << 64
+            );
             quoteAmount = baseToken < quoteToken
                 ? FullMath.mulDiv(ratioX128, baseAmount, 1 << 128)
                 : FullMath.mulDiv(1 << 128, baseAmount, ratioX128);
